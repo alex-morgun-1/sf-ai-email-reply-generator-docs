@@ -3,7 +3,7 @@
 > **Package**: AI Email Reply Generator  
 > **Namespace**: `aiemailreply`  
 > **API Version**: 60.0  
-> **Date**: April 28, 2026  
+> **Date**: May 7, 2026  
 > **Prepared by**: Alex Morgun (omorgun@morgunsolutions.com)
 
 ---
@@ -12,7 +12,9 @@
 
 This document explains all scanner suppressions in the AI Email Reply Generator managed package. Each suppression is intentional, justified, and documented below for the AppExchange security review team.
 
-**Scanner results**: Salesforce Code Analyzer reports **0 violations** across all engines (PMD, ESLint, CPD, RetireJS) as of April 28, 2026.
+**Scanner results**: Salesforce Code Analyzer v0.45.0 reports **2 violations** (both severity-3 false positives) as of May 7, 2026. All other engines (ESLint, CPD, RetireJS) report 0 violations. The 2 violations are documented below as items 4 and 5 in the Summary table.
+
+**DAST**: Not applicable. This is a 100% native Salesforce Lightning managed package. MDS LLC operates no web servers, APIs, mobile applications, or ISV-hosted infrastructure. All external HTTP callouts originate from within the customer's Salesforce org and are directed to the customer's own AI provider account. There is no ISV-controlled endpoint to scan.
 
 ---
 
@@ -97,4 +99,5 @@ The suppression is applied at the class level because this is the only class in 
 | 5   | `ProtectSensitiveData`                | `AI_Email_Reply_Draft__c/fields/Token_Count__c`   | 1     | False positive — `Token_Count__c` is a numeric count of AI tokens consumed per draft (Integer). Not a credential or secret. Field type: `Number(18,0)`.                                                                                                                                                                                                                                                                                       |
 
 **Total suppressions**: 9  
+**Active violations in report**: 2 (items 4 and 5 — both false positives, not suppressible in XML metadata files)  
 **True security issues**: 0
