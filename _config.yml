@@ -1,0 +1,11 @@
+title: "AI Email Reply Generator — Documentation"
+description: "AppExchange managed package by MDS LLC. Public documentation for the AppExchange Security Review and customers."
+theme: jekyll-theme-minimal
+url: "https://alex-morgun-1.github.io"
+baseurl: "/sf-ai-email-reply-generator-docs"
+
+markdown: kramdown
+highlighter: rouge
+
+exclude:
+  - README.md
