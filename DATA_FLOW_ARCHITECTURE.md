@@ -1,13 +1,13 @@
 # Architecture & Data Flow — AI Email Reply Generator
 
 > **Company**: MDS LLC
-> **Last Updated**: April 24, 2026
+> **Last Updated**: May 7, 2026
 
 ---
 
 ## 1. High-Level Architecture
 
-The AI Email Reply Generator is a 100% native Salesforce Lightning application. It consists of four LWC components, seven Apex classes, one custom object, and two Custom Metadata Types. No external servers or ISV-hosted infrastructure exist.
+The AI Email Reply Generator is a 100% native Salesforce Lightning application. It consists of four LWC components, ten Apex classes, one custom object, two Custom Metadata Types, and four Named Credentials. No external servers or ISV-hosted infrastructure exist.
 
 ```
 ┌─────────────────────────────────────────────────────────────────────┐
@@ -47,18 +47,21 @@ The AI Email Reply Generator is a 100% native Salesforce Lightning application. 
 │  ┌─────────┼────────────────────────────────────────────────────┐   │
 │  │  Callout Layer                                               │   │
 │  │                                                              │   │
-│  │  Named Credential: AI_Email_Reply_Provider                   │   │
-│  │  External Credential: AI_Email_Reply_ExtCred                 │   │
-│  │  (Customer-configured API key)                               │   │
+│  │  Named Credential: AI_Email_Reply_Provider (OpenAI)        │   │
+│  │  Named Credential: AI_Email_Reply_Anthropic               │   │
+│  │  Named Credential: AI_Email_Reply_Google                  │   │
+│  │  Named Credential: AI_Email_Reply_XAI                     │   │
+│  │  External Credential: AI_Email_Reply_ExtCred              │   │
+│  │  (Customer-configured API key, shared)                    │   │
 │  └─────────┼────────────────────────────────────────────────────┘   │
 │            │                                                        │
 └────────────┼────────────────────────────────────────────────────────┘
              │ HTTPS (TLS 1.2+)
              ▼
 ┌────────────────────────────────┐
-│  Customer's AI Provider        │
-│  (OpenAI / Anthropic / Other)  │
-│  Customer-owned API key        │
+│  Customer's AI Provider                │
+│  (OpenAI / Anthropic / Google / xAI)   │
+│  Customer-owned API key                │
 └────────────────────────────────┘
 ```
 
@@ -100,11 +103,14 @@ User clicks "Generate Reply"
     │         └─ Returns: assembled prompt string
     │
     └──► [7] AIProviderCalloutService.callProvider()
-              ├─ Builds HTTP request body (prompt + model + temperature + max_tokens)
-              ├─ Sets anthropic-version header if provider = anthropic
-              ├─ Callout: callout:AI_Email_Reply_Provider (Named Credential)
-              │           └─ HTTPS POST to customer's AI provider
-              ├─ Parses response → extracts generated reply text
+              ├─ Resolves Named Credential by provider:
+              │     openai   → callout:AI_Email_Reply_Provider
+              │     anthropic → callout:AI_Email_Reply_Anthropic
+              │     google   → callout:AI_Email_Reply_Google/<model>:generateContent
+              │     xai      → callout:AI_Email_Reply_XAI
+              ├─ Builds provider-specific HTTP request body
+              ├─ HTTPS POST to customer's AI provider
+              ├─ Delegates response parsing to AIProviderResponseParser
               └─ Returns: AI-generated reply text
         │
         ▼
@@ -177,34 +183,37 @@ User clicks "Send Reply"
 ## 5. Authentication & Credential Flow
 
 ```
-┌─────────────────────────────────────────────────────┐
-│  Salesforce Org                                      │
-│                                                      │
-│  External Credential: AI_Email_Reply_ExtCred         │
-│  ├─ Type: Custom                                     │
-│  ├─ Protocol: Custom                                 │
-│  └─ Parameter: ApiKey (AuthHeader, masked)           │
-│         │                                            │
-│         ▼                                            │
-│  Named Credential: AI_Email_Reply_Provider           │
-│  ├─ Endpoint: https://<customer-configured>/...      │
-│  ├─ Auth: Generated from External Credential         │
-│  └─ HTTPS enforced                                   │
-│         │                                            │
-└─────────┼───────────────────────────────────────────┘
+┌─────────────────────────────────────────────────────────────┐
+│  Salesforce Org                                              │
+│                                                              │
+│  External Credential: AI_Email_Reply_ExtCred                 │
+│  ├─ Type: Custom / Protocol: Custom                          │
+│  └─ Parameter: ApiKey (AuthHeader, masked, encrypted)        │
+│         │ (shared across all 4 Named Credentials)            │
+│         ▼                                                    │
+│  Named Credential: AI_Email_Reply_Provider   (OpenAI)        │
+│  Named Credential: AI_Email_Reply_Anthropic  (Anthropic)     │
+│  Named Credential: AI_Email_Reply_Google     (Google Gemini) │
+│  Named Credential: AI_Email_Reply_XAI        (xAI)           │
+│  ├─ Endpoint: https://<customer-configured>/...              │
+│  ├─ Auth: Generated from External Credential                 │
+│  └─ HTTPS enforced; resolved at runtime by resolveNamedCredential()│
+│         │                                                    │
+└─────────┼────────────────────────────────────────────────────┘
           │  Authorization: Bearer <customer-api-key>
           │  Content-Type: application/json
           ▼
-┌─────────────────────────────┐
-│  AI Provider API            │
-│  (Customer's account)       │
-└─────────────────────────────┘
+┌───────────────────────────────────────┐
+│  AI Provider API (Customer's account) │
+│  OpenAI / Anthropic / Google / xAI    │
+└───────────────────────────────────────┘
 ```
 
 **Security controls:**
 
 - API key never appears in Apex code or debug logs.
-- Named Credential generates the Authorization header automatically.
+- Named Credentials generate the Authorization header automatically via External Credential merge field.
+- `resolveNamedCredential()` applies the managed namespace prefix (`aiemailreply__`) automatically when running in the packaged context.
 - Customer configures both the endpoint URL and API key via Salesforce Setup UI.
 - The `AI_Email_Reply_ExtCred` ships with placeholder value `CONFIGURE_IN_SETUP`.
 
@@ -234,15 +243,18 @@ User clicks "Send Reply"
 
 ### Apex Classes
 
-| Class                      | Layer      | Purpose                                                         |
-| -------------------------- | ---------- | --------------------------------------------------------------- |
-| `AIEmailReplyController`   | Controller | @AuraEnabled methods for LWC (generate, send, get email)        |
-| `AIReplyAdminController`   | Controller | @AuraEnabled methods for admin panel (config, test connection)  |
-| `EmailContextService`      | Service    | Queries EmailMessage records and assembles email thread context |
-| `AIReplyConfigService`     | Service    | Reads CMDT configuration and prompt templates                   |
-| `AIEmailReplyService`      | Service    | Assembles prompts, sanitizes input, orchestrates generation     |
-| `AIProviderCalloutService` | Service    | Performs HTTP callout via Named Credential                      |
-| `AIEmailDraftService`      | Service    | CRUD operations on AI_Email_Reply_Draft\_\_c                    |
+| Class                        | Layer      | Purpose                                                                  |
+| ---------------------------- | ---------- | ------------------------------------------------------------------------ |
+| `AIEmailReplyController`     | Controller | @AuraEnabled methods for LWC (generate, send, get email)                 |
+| `AIReplyAdminController`     | Controller | @AuraEnabled methods for admin panel (config, test connection)           |
+| `EmailContextService`        | Service    | Queries EmailMessage records and assembles email thread context          |
+| `AIReplyConfigService`       | Service    | Reads CMDT configuration and prompt templates                            |
+| `AIEmailReplyService`        | Service    | Assembles prompts, sanitizes input, orchestrates generation              |
+| `AIProviderCalloutService`   | Service    | Performs HTTP callout via Named Credential; delegates parsing to parser  |
+| `AIProviderResponseParser`   | Service    | Parses HTTP responses from all 4 provider formats into standard objects  |
+| `AIEmailDraftService`        | Service    | CRUD operations on AI_Email_Reply_Draft\_\_c                             |
+| `AIReplyLogger`              | Utility    | Centralized logging — logs only `e.getMessage()` at `LoggingLevel.ERROR` |
+| `PostInstallHandler`         | Installer  | Post-install script — creates unmanaged `AI_Email_Reply_API_Access` permission set and assigns it to installing user |
 
 ### Data Objects
 
@@ -254,7 +266,18 @@ User clicks "Send Reply"
 
 ### Credentials
 
-| Name                      | Type                              |
-| ------------------------- | --------------------------------- |
-| `AI_Email_Reply_Provider` | Named Credential                  |
-| `AI_Email_Reply_ExtCred`  | External Credential (Custom auth) |
+| Name                        | Type                              | Provider      |
+| --------------------------- | --------------------------------- | ------------- |
+| `AI_Email_Reply_Provider`   | Named Credential                  | OpenAI (default) |
+| `AI_Email_Reply_Anthropic`  | Named Credential                  | Anthropic     |
+| `AI_Email_Reply_Google`     | Named Credential                  | Google Gemini |
+| `AI_Email_Reply_XAI`        | Named Credential                  | xAI (Grok)    |
+| `AI_Email_Reply_ExtCred`    | External Credential (Custom auth) | All providers |
+
+### Post-Install Behavior
+
+On package installation, `PostInstallHandler` runs automatically and:
+
+1. Creates an unmanaged Permission Set named `AI_Email_Reply_API_Access` (if it does not already exist).
+2. Assigns it to the installing user.
+3. The admin must then manually add External Credential principal access to this Permission Set via Salesforce Setup → External Credential Principal Access — as guided by the in-app Setup Wizard.
