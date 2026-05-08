@@ -1,7 +1,7 @@
 # Third-Party Library Inventory — AI Email Reply Generator
 
 > **Company**: MDS LLC
-> **Last Updated**: April 24, 2026
+> **Last Updated**: May 7, 2026
 
 ---
 
@@ -23,11 +23,19 @@ No external CSS frameworks, UI libraries, charting libraries, or utility package
 
 The following packages are used exclusively during development and testing. They are **not included** in the distributed managed package.
 
-| Package                     | Version | Purpose                         | License      |
-| --------------------------- | ------- | ------------------------------- | ------------ |
-| `jest`                      | ^29.7.0 | JavaScript testing framework    | MIT          |
-| `@lwc/jest-preset`          | ^16.0.0 | LWC Jest testing preset         | MIT          |
-| `@salesforce/sfdx-lwc-jest` | ^5.1.0  | Salesforce LWC Jest integration | BSD-3-Clause |
+| Package                               | Version  | Purpose                                    | License      |
+| ------------------------------------- | -------- | ------------------------------------------ | ------------ |
+| `jest`                                | ^29.7.0  | JavaScript testing framework               | MIT          |
+| `@lwc/jest-preset`                    | ^16.0.0  | LWC Jest testing preset                    | MIT          |
+| `@salesforce/sfdx-lwc-jest`           | ^5.1.0   | Salesforce LWC Jest integration            | BSD-3-Clause |
+| `eslint`                              | ^9.39.4  | JavaScript/LWC linter                      | MIT          |
+| `@lwc/eslint-plugin-lwc`              | ^3.5.0   | ESLint rules for LWC                       | MIT          |
+| `@salesforce/eslint-config-lwc`       | ^4.1.2   | Salesforce LWC ESLint config               | BSD-3-Clause |
+| `@salesforce/eslint-plugin-lightning` | ^2.0.0   | ESLint rules for Lightning components      | BSD-3-Clause |
+| `eslint-plugin-import`                | ^2.32.0  | ESLint import/export rules                 | MIT          |
+| `eslint-plugin-jest`                  | ^28.14.0 | ESLint rules for Jest tests                | MIT          |
+| `husky`                               | ^9.1.7   | Git hooks (pre-commit lint + test)         | MIT          |
+| `lint-staged`                         | ^16.4.0  | Run linters on staged files pre-commit     | MIT          |
 
 These are declared as `devDependencies` in `package.json` and are used for running LWC Jest tests during development only.
 

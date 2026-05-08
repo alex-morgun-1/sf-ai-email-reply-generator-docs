@@ -1,7 +1,7 @@
 # Sensitive Data Inventory — AI Email Reply Generator
 
 > **Company**: MDS LLC
-> **Last Updated**: April 24, 2026
+> **Last Updated**: May 7, 2026
 
 ---
 
@@ -18,7 +18,7 @@ These data elements are read from standard Salesforce objects during reply gener
 | Data Element             | Source Object.Field        | Contains PII?                  | Transmitted to AI Provider?                    | Configurable?                |
 | ------------------------ | -------------------------- | ------------------------------ | ---------------------------------------------- | ---------------------------- |
 | Email subject            | `EmailMessage.Subject`     | Potentially                    | **Yes** — always included                      | No                           |
-| Email body (full thread) | `EmailMessage.TextBody`    | **Yes** — may contain any data | **Yes** — always included (core functionality) | No                           |
+| Email body (full thread) | `EmailMessage.TextBody` / `HtmlBody` | **Yes** — may contain any data | **Yes** — always included (core functionality); `HtmlBody` used as fallback when `TextBody` is blank, HTML tags stripped before use | No |
 | Sender email address     | `EmailMessage.FromAddress` | **Yes**                        | Yes — if enabled                               | Yes (`Include_Sender__c`)    |
 | Sender name              | `EmailMessage.FromName`    | **Yes**                        | Yes — if enabled                               | Yes (`Include_Sender__c`)    |
 | Recipient email address  | `EmailMessage.ToAddress`   | **Yes**                        | Yes — if enabled                               | Yes (`Include_Recipient__c`) |
@@ -44,7 +44,7 @@ The app automatically creates a draft record when a reply is sent, to maintain a
 | Generated Text    | `Generated_Text__c`    | Long Text Area | **Potentially** — contains AI-generated reply based on email content | Original AI output                           |
 | Edited Text       | `Edited_Text__c`       | Long Text Area | **Potentially** — user-modified version                              | User's edited version of the draft           |
 | Status            | `Status__c`            | Picklist       | No                                                                   | Sent                                         |
-| AI Provider       | `AI_Provider__c`       | Text           | No                                                                   | Provider used (openai, anthropic)            |
+| AI Provider       | `AI_Provider__c`       | Text           | No                                                                   | Provider used (openai, anthropic, google, xai) |
 | AI Model          | `AI_Model__c`          | Text           | No                                                                   | Model used (gpt-4o, claude-3, etc.)          |
 | Token Count       | `Token_Count__c`       | Number         | No                                                                   | Tokens consumed for generation               |
 | Prompt Template   | `Prompt_Template__c`   | Text           | No                                                                   | Template name used                           |

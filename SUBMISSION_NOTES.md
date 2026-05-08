@@ -3,7 +3,7 @@
 > **Package**: AI Email Reply Generator  
 > **Namespace**: `aiemailreply`  
 > **API Version**: 60.0  
-> **Date**: April 28, 2026  
+> **Date**: May 7, 2026  
 > **Prepared by**: Alex Morgun (omorgun@morgunsolutions.com)
 
 ---
@@ -16,7 +16,7 @@ This app uses a **Bring Your Own Key (BYOK)** model. The ISV does not host, oper
 
 ### How It Works
 
-1. The package ships with a Named Credential (`AI_Email_Reply_Provider`) and External Credential (`AI_Email_Reply_ExtCred`).
+1. The package ships with four Named Credentials (`AI_Email_Reply_Provider`, `AI_Email_Reply_Anthropic`, `AI_Email_Reply_Google`, `AI_Email_Reply_XAI`) and one External Credential (`AI_Email_Reply_ExtCred`).
 2. The External Credential ships with a credential-level `Authorization` parameter (`AuthHeader` type) set to the placeholder value `Bearer CONFIGURE_IN_SETUP` — **no working API key is included**. The `generateAuthorizationHeader=true` setting on the Named Credential injects this header automatically on every callout once the admin replaces the placeholder with a real key.
 3. The customer's administrator configures their own AI provider URL and API key through Salesforce Setup:
    - **Named Credential URL**: The full API endpoint (e.g., `https://api.openai.com/v1/chat/completions`)
@@ -31,7 +31,7 @@ This app uses a **Bring Your Own Key (BYOK)** model. The ISV does not host, oper
 
 ### Supported Providers
 
-The app supports three provider formats (OpenAI, Anthropic, and a generic custom format). The customer selects their provider in the app's configuration metadata (`AI_Email_Reply_Config__mdt.Provider__c`). The callout service adapts the request/response format accordingly.
+The app supports four provider formats: **OpenAI** (and OpenAI-compatible endpoints), **Anthropic**, **Google Gemini**, and **xAI (Grok)**. The customer selects their provider in the app's configuration metadata (`AI_Email_Reply_Config__mdt.Provider__c`). The callout service uses a separate Named Credential for each provider (`AI_Email_Reply_Provider`, `AI_Email_Reply_Anthropic`, `AI_Email_Reply_Google`, `AI_Email_Reply_XAI`), all backed by the same External Credential (`AI_Email_Reply_ExtCred`).
 
 ### For the Security Review Team
 
@@ -59,7 +59,7 @@ When a user generates an email reply, the following data is sent to the customer
 
 Before generating a reply, the app displays a data disclosure banner that the user must acknowledge:
 
-> _"Email content will be sent to your organization's configured AI provider for processing."_
+> _"Data Disclosure: When you generate a reply, the email thread content (including sender names, email addresses, and message body) will be sent to the external AI provider configured by your administrator. This data leaves Salesforce for processing. By proceeding, you acknowledge this data transmission."_
 
 This banner is shown in the `aiEmailReplyGenerator` LWC and blocks the generate action until acknowledged.
 
@@ -67,7 +67,7 @@ This banner is shown in the `aiEmailReplyGenerator` LWC and blocks the generate 
 
 ## 3. Authentication & Credential Security
 
-- **No hardcoded API keys** anywhere in the codebase. The single callout endpoint is `callout:AI_Email_Reply_Provider`.
+- **No hardcoded API keys** anywhere in the codebase. Callouts use four Named Credentials: `callout:AI_Email_Reply_Provider` (OpenAI), `callout:AI_Email_Reply_Anthropic`, `callout:AI_Email_Reply_Google`, `callout:AI_Email_Reply_XAI` — resolved at runtime by `AIProviderCalloutService.resolveNamedCredential()`.
 - **No hardcoded URLs** — the Named Credential resolves the endpoint at runtime.
 - **External Credential** uses `Custom` authentication protocol with an `AuthHeader` parameter type. The API key is stored in Salesforce's secure credential store (encrypted at rest).
 - **No `UserInfo.getSessionId()`** usage. No session tokens are transmitted externally.
@@ -100,7 +100,7 @@ This is not a security gap — both keywords enforce the same CRUD/FLS checks. S
 
 Salesforce requires DAST scanning (ZAP, Burp Suite, or Chimera) for solutions with external callouts. This requirement is **not applicable** to this package for the following reason:
 
-This app uses a **BYOK (Bring Your Own Key)** model. The ISV does not host, operate, or maintain any external web service or API endpoint. The only external callout is `callout:AI_Email_Reply_Provider`, which resolves at runtime to an AI provider URL **configured by the customer's own Salesforce administrator**. The ISV has no access to, and no control over, any such endpoint.
+This app uses a **BYOK (Bring Your Own Key)** model. The ISV does not host, operate, or maintain any external web service or API endpoint. The four Named Credential callout endpoints (`callout:AI_Email_Reply_Provider`, `callout:AI_Email_Reply_Anthropic`, `callout:AI_Email_Reply_Google`, `callout:AI_Email_Reply_XAI`) resolve at runtime to AI provider URLs **configured by the customer's own Salesforce administrator**. The ISV has no access to, and no control over, any such endpoint.
 
 Per Salesforce security review guidance, pen-testing third-party infrastructure requires permission from the owner of that infrastructure. Since the endpoint is customer-configured and operated by a third-party AI provider (OpenAI, Anthropic, etc.), the ISV cannot authorize or conduct DAST against it.
 
