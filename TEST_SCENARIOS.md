@@ -13,19 +13,19 @@ All permission sets and test data are pre-staged. No setup steps are required be
 **Admin User**
 
 - Username: `epic.30beb5bc4b5e@orgfarm.salesforce.com`
-- Password: `Review2027#Adm!`
+- Password: *(provided separately in the security review submission)*
 - Permissions: AI_Email_Reply_Admin + AI_Email_Reply_User
 
 **End User 1** (has app access)
 
 - Username: `testenduser.853007@00ddm00000unecpuas.scratch`
-- Password: `Review2027#Usr1!`
+- Password: *(provided separately in the security review submission)*
 - Permissions: AI_Email_Reply_User only
 
 **End User 2** (no access — for negative/denial testing)
 
 - Username: `testenduser.859758@00ddm00000unecpuas.scratch`
-- Password: `Review2027#Usr2!`
+- Password: *(provided separately in the security review submission)*
 - Permissions: None
 
 ---
