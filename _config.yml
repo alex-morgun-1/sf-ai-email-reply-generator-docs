@@ -1,0 +1,19 @@
+title: "AI Email Reply Generator"
+description: "Setup, user guide, FAQ and troubleshooting for the AI Email Reply Generator managed package by MDS LLC."
+theme: jekyll-theme-minimal
+url: "https://alex-morgun-1.github.io"
+baseurl: "/sf-ai-email-reply-generator-docs"
+
+markdown: kramdown
+highlighter: rouge
+
+show_downloads: false
+
+defaults:
+  - scope:
+      path: ""
+    values:
+      layout: "default"
+
+exclude:
+  - README.md
