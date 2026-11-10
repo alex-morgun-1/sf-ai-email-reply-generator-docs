@@ -1,8 +1,3 @@
----
-layout: default
-title: "AI Email Reply Generator — Documentation"
----
-
 # AI Email Reply Generator
 
 **Draft high-quality email replies in Salesforce in seconds, in the tone you choose.**
@@ -21,12 +16,12 @@ runs no servers and never receives your data.
 
 | Guide | What it covers |
 |---|---|
-| [Setup Guide](setup) | One-time admin setup — install, API key, permission sets, adding the component to your pages |
-| [User Guide](user-guide) | Day-to-day use — generating a reply, choosing a tone, editing, sending, draft history |
-| [FAQ](faq) | Providers, cost, what data is sent to the AI, supported editions, languages |
-| [Troubleshooting](troubleshooting) | Error messages and what to do about them |
+| [Setup Guide](setup.md) | One-time admin setup — install, API key, permission sets, adding the component to your pages |
+| [User Guide](user-guide.md) | Day-to-day use — generating a reply, choosing a tone, editing, sending, draft history |
+| [FAQ](faq.md) | Providers, cost, what data is sent to the AI, supported editions, languages |
+| [Troubleshooting](troubleshooting.md) | Error messages and what to do about them |
 
-New install? Work through the [Setup Guide](setup) first — the app will not generate
+New install? Work through the [Setup Guide](setup.md) first — the app will not generate
 replies until an AI provider API key is configured.
 
 ---
@@ -46,8 +41,8 @@ replies until an AI provider API key is configured.
 
 ## Policies
 
-- [Privacy Policy](PRIVACY_POLICY) — what data the app handles, and why MDS LLC is not a data processor
-- [Security Policy](SECURITY_POLICY) — development practices, vulnerability response, and breach response
+- [Privacy Policy](PRIVACY_POLICY.md) — what data the app handles, and why MDS LLC is not a data processor
+- [Security Policy](SECURITY_POLICY.md) — development practices, vulnerability response, and breach response
 
 ---
 
@@ -60,5 +55,5 @@ replies until an AI provider API key is configured.
 | Publisher | MDS LLC |
 
 When you write in, it helps to include your Salesforce edition, the AI provider and model
-you configured, and the exact error text. [Troubleshooting](troubleshooting) lists the
+you configured, and the exact error text. [Troubleshooting](troubleshooting.md) lists the
 details worth gathering first.

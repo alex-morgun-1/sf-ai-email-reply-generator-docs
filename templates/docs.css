@@ -1,0 +1,183 @@
+/* ============================================================
+   AI Email Reply Generator — customer documentation
+   Inherits the MDS design language: monochrome, geometric,
+   Space Grotesk headings over Inter body, system light/dark.
+   Self-contained: does not depend on the site's styles.css.
+   ============================================================ */
+
+:root {
+  --ink:      #0a0a0a;
+  --paper:    #ffffff;
+  --surface:  #f6f6f6;
+  --muted:    #6b6b6b;
+  --line:     #e6e6e6;
+  --line-2:   #d4d4d4;
+  --inverse-bg: #0a0a0a;
+  --inverse-fg: #ffffff;
+
+  --maxw: 1120px;
+  --radius: 14px;
+  --font-head: "Space Grotesk", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --font-body: "Inter", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --font-mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --ink:      #f3f3f3;
+    --paper:    #0a0a0a;
+    --surface:  #141414;
+    --muted:    #9a9a9a;
+    --line:     #242424;
+    --line-2:   #333333;
+    --inverse-bg: #f3f3f3;
+    --inverse-fg: #0a0a0a;
+  }
+}
+
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-body);
+  font-size: 17px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+.container { width: 100%; max-width: var(--maxw); margin: 0 auto; padding: 0 24px; }
+
+/* ---------- Header ---------- */
+.site-header {
+  position: sticky; top: 0; z-index: 50;
+  background: color-mix(in srgb, var(--paper) 88%, transparent);
+  backdrop-filter: saturate(140%) blur(8px);
+  border-bottom: 1px solid var(--line);
+}
+.site-header .container {
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 24px; height: 64px;
+}
+.brand { display: inline-flex; align-items: center; gap: 10px; text-decoration: none; color: inherit; }
+.brand .mark { width: 26px; height: 26px; }
+.brand .wordmark { font-family: var(--font-head); font-weight: 700; letter-spacing: 0.04em; font-size: 19px; }
+.brand .sep { color: var(--line-2); font-weight: 400; }
+.brand .product { font-family: var(--font-head); font-weight: 500; font-size: 15px; color: var(--muted); }
+
+.nav { display: flex; align-items: center; gap: 22px; }
+.navlink {
+  font-family: var(--font-head); font-weight: 500; font-size: 15px;
+  color: var(--muted); text-decoration: none;
+}
+.navlink:hover { color: var(--ink); }
+.navlink[aria-current="page"] { color: var(--ink); }
+
+/* ---------- Layout ---------- */
+.layout { display: grid; grid-template-columns: 232px minmax(0, 1fr); gap: 56px; padding: 48px 0 96px; }
+
+.sidebar { position: sticky; top: 96px; align-self: start; }
+.sidebar .eyebrow {
+  font-family: var(--font-head); text-transform: uppercase;
+  letter-spacing: 0.22em; font-size: 11px; font-weight: 500;
+  color: var(--muted); margin: 0 0 14px;
+}
+.sidebar ul { list-style: none; margin: 0 0 28px; padding: 0; }
+.sidebar li { margin: 0 0 2px; }
+.sidebar a {
+  display: block; padding: 7px 12px; border-radius: 9px;
+  text-decoration: none; color: var(--muted); font-size: 15px;
+  border: 1px solid transparent;
+}
+.sidebar a:hover { color: var(--ink); background: var(--surface); }
+.sidebar a[aria-current="page"] {
+  color: var(--ink); background: var(--surface);
+  border-color: var(--line); font-weight: 500;
+}
+
+/* ---------- Content ---------- */
+.content { min-width: 0; }
+.content > :first-child { margin-top: 0; }
+
+.content h1, .content h2, .content h3, .content h4 {
+  font-family: var(--font-head); font-weight: 600;
+  letter-spacing: -0.02em; line-height: 1.15;
+}
+.content h1 { font-size: clamp(32px, 4.2vw, 44px); margin: 0 0 20px; }
+.content h2 { font-size: 26px; margin: 52px 0 16px; padding-top: 20px; border-top: 1px solid var(--line); }
+.content h3 { font-size: 20px; margin: 34px 0 12px; }
+.content h4 { font-size: 17px; margin: 26px 0 10px; }
+
+.content p { margin: 0 0 16px; }
+.content strong { font-weight: 600; }
+.content a { color: var(--ink); text-decoration: underline; text-decoration-color: var(--line-2); text-underline-offset: 3px; }
+.content a:hover { text-decoration-color: var(--ink); }
+
+.content ul, .content ol { margin: 0 0 16px; padding-left: 22px; }
+.content li { margin: 0 0 7px; }
+.content li > ul, .content li > ol { margin-top: 7px; }
+
+.content hr { height: 1px; border: 0; background: var(--line); margin: 40px 0; }
+
+/* A markdown rule immediately before a heading would double the separator. */
+.content hr + h2 { border-top: 0; padding-top: 0; margin-top: 0; }
+.content hr + h3 { margin-top: 0; }
+
+.content code {
+  font-family: var(--font-mono); font-size: 0.875em;
+  background: var(--surface); border: 1px solid var(--line);
+  border-radius: 6px; padding: 1px 5px;
+}
+.content pre {
+  background: var(--surface); border: 1px solid var(--line);
+  border-radius: var(--radius); padding: 16px 18px;
+  overflow-x: auto; margin: 0 0 18px;
+}
+.content pre code { background: none; border: 0; padding: 0; font-size: 14px; line-height: 1.55; }
+
+.content blockquote {
+  margin: 0 0 18px; padding: 14px 18px;
+  background: var(--surface); border: 1px solid var(--line);
+  border-left: 3px solid var(--line-2); border-radius: 0 var(--radius) var(--radius) 0;
+  color: var(--ink);
+}
+.content blockquote > :last-child { margin-bottom: 0; }
+
+/* ---------- Tables ---------- */
+.table-wrap { overflow-x: auto; margin: 0 0 22px; }
+.content table {
+  width: 100%; border-collapse: collapse;
+  border: 1px solid var(--line); border-radius: var(--radius);
+  font-size: 15.5px;
+}
+.content thead th {
+  text-align: left; font-family: var(--font-head); font-weight: 600;
+  font-size: 13px; text-transform: uppercase; letter-spacing: 0.08em;
+  color: var(--muted); background: var(--surface);
+  padding: 11px 14px; border-bottom: 1px solid var(--line);
+}
+.content tbody td { padding: 11px 14px; border-bottom: 1px solid var(--line); vertical-align: top; }
+.content tbody tr:last-child td { border-bottom: 0; }
+
+/* ---------- Footer ---------- */
+.site-footer {
+  border-top: 1px solid var(--line); background: var(--surface);
+  padding: 36px 0; font-size: 15px; color: var(--muted);
+}
+.site-footer .container { display: flex; flex-wrap: wrap; gap: 14px 32px; justify-content: space-between; }
+.site-footer a { color: var(--ink); text-decoration: none; }
+.site-footer a:hover { text-decoration: underline; }
+
+/* ---------- Narrow screens ---------- */
+@media (max-width: 860px) {
+  .layout { grid-template-columns: 1fr; gap: 0; padding: 32px 0 72px; }
+  .sidebar { position: static; margin-bottom: 36px; padding-bottom: 28px; border-bottom: 1px solid var(--line); }
+  .sidebar ul { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 18px; }
+  .sidebar a { border: 1px solid var(--line); }
+  .nav { display: none; }
+  .brand .sep, .brand .product { display: none; }
+  body { font-size: 16px; }
+}

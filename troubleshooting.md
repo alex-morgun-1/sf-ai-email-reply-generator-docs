@@ -1,14 +1,9 @@
----
-layout: default
-title: "Troubleshooting"
----
-
 [← Documentation home](./)
 
 # Troubleshooting
 
 Grouped by what you see on screen. Most items are administrator tasks; the
-[Setup Guide](setup) has the step-by-step for each one.
+[Setup Guide](setup.md) has the step-by-step for each one.
 
 ---
 
@@ -45,7 +40,7 @@ Almost always **External Credential Principal Access**. Create or reuse an unman
 permission set, enable the principal for your provider on it (for example
 `aiemailreply__AI_Email_Reply_ExtCred_OpenAI - OpenAI_Principal`), and assign it to every
 user who generates replies. Managed package permission sets cannot grant this in your org
-— see [step 5](setup).
+— see [step 5](setup.md).
 
 ### I can't find the component in Lightning App Builder
 
@@ -105,7 +100,7 @@ Work through these in order:
 | Key validity | Paste the key into your provider's own console or test call. Revoked and expired keys are a common cause. |
 | Billing | Most providers reject calls on accounts with no payment method or a spent credit balance. |
 | Model name | It must exist and be enabled for your account. Retired model names fail here. |
-| Principal access | The permission set from [step 5](setup) must be assigned to you too. |
+| Principal access | The permission set from [step 5](setup.md) must be assigned to you too. |
 | Provider match | The active config's **Provider** must match the credential you actually filled in. Filling in the OpenAI key while `anthropic` is the active provider fails. |
 
 ### "Could not reach the AI provider. Check your Named Credential configuration and network connectivity."
@@ -188,11 +183,11 @@ Quality problems are configuration, not bugs. In rough order of impact:
 
 | Symptom | Try |
 |---|---|
-| Reply addressed to the wrong person | Your custom prompt template is missing the role-context block — see [Prompt templates](setup#prompt-templates) |
+| Reply addressed to the wrong person | Your custom prompt template is missing the role-context block — see [Prompt templates](setup.md#prompt-templates) |
 | Replies too long or too short | Adjust **Max Tokens**, or use the **Concise** tone |
 | Replies too generic | Use a more specific template, or turn on **Include Subject in Prompt** |
 | Replies too unpredictable | Lower **Temperature** (0.3–0.5) |
-| Invented facts, dates or amounts | Expected behaviour of any LLM — the model sees only the email thread. Edit before sending; see the [User Guide](user-guide) |
+| Invented facts, dates or amounts | Expected behaviour of any LLM — the model sees only the email thread. Edit before sending; see the [User Guide](user-guide.md) |
 | Wrong language | Add an explicit language instruction to your prompt template |
 
 ---

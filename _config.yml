@@ -1,19 +1,17 @@
-title: "AI Email Reply Generator"
-description: "Setup, user guide, FAQ and troubleshooting for the AI Email Reply Generator managed package by MDS LLC."
-theme: jekyll-theme-minimal
-url: "https://alex-morgun-1.github.io"
-baseurl: "/sf-ai-email-reply-generator-docs"
+# This repository is now the SOURCE for the customer documentation, not its
+# published home. The published site is built by scripts/build-site.py into the
+# mds-website repository and served at:
+#
+#   https://morgunsolutions.com/sf-ai-email-generator/docs/
+#
+# GitHub Pages stays enabled here only to serve the redirect pages at the old
+# URLs, which were public during the security review. The Markdown sources are
+# excluded from the build so they cannot collide with those redirects.
 
-markdown: kramdown
-highlighter: rouge
-
-show_downloads: false
-
-defaults:
-  - scope:
-      path: ""
-    values:
-      layout: "default"
+title: "AI Email Reply Generator - Documentation"
+description: "Moved to morgunsolutions.com/sf-ai-email-generator/docs"
 
 exclude:
-  - README.md
+  - "*.md"
+  - scripts
+  - templates

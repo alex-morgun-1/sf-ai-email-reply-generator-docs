@@ -1,8 +1,3 @@
----
-layout: default
-title: "Setup Guide"
----
-
 [← Documentation home](./)
 
 # Setup Guide
@@ -22,7 +17,7 @@ your team.
 | Salesforce Enterprise, Unlimited or Developer edition | Lightning Experience is required; Salesforce Classic is not supported |
 | System Administrator access | Setup touches Named Credentials, Permission Sets and Custom Metadata |
 | An account with a supported AI provider | OpenAI, Anthropic, Google or xAI |
-| An API key from that provider | You pay the provider directly for usage — see the [FAQ](faq) |
+| An API key from that provider | You pay the provider directly for usage — see the [FAQ](faq.md) |
 
 The app ships with the AI provider endpoints already configured. You never need to create
 or edit a Named Credential URL.
@@ -117,7 +112,7 @@ that is retired, misspelled, or outside your plan fails at **Test Connection**.
 Go back to **Admin Settings** and click **Test Connection**. It checks both that the key
 authenticates and that the model name is valid for your provider.
 
-If it fails, see [Troubleshooting](troubleshooting).
+If it fails, see [Troubleshooting](troubleshooting.md).
 
 ## Step 8 — Give your team access
 
@@ -182,7 +177,7 @@ leave the org.
 | Include Timestamp in Prompt | Message dates and times |
 
 Turn one on only if it measurably improves replies for your use case. See the
-[Privacy Policy](PRIVACY_POLICY).
+[Privacy Policy](PRIVACY_POLICY.md).
 
 ### Prompt templates
 
@@ -212,4 +207,4 @@ All three built-in templates already include it.
 
 ---
 
-Next: the [User Guide](user-guide) for your team, or the [FAQ](faq).
+Next: the [User Guide](user-guide.md) for your team, or the [FAQ](faq.md).

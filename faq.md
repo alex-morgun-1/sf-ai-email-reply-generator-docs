@@ -1,8 +1,3 @@
----
-layout: default
-title: "FAQ"
----
-
 [← Documentation home](./)
 
 # Frequently Asked Questions
@@ -79,7 +74,7 @@ trust, audit or breach.
 
 In a Salesforce **External Credential**, encrypted and managed by Salesforce. It is never
 stored in the package's code or metadata, never logged, and the app cannot read it back —
-Salesforce injects it into the outbound request. See the [Setup Guide](setup).
+Salesforce injects it into the outbound request. See the [Setup Guide](setup.md).
 
 ### Does Salesforce Einstein work as a provider?
 
@@ -110,7 +105,7 @@ sent, based on how your org is configured.
 No. The app runs entirely inside your Salesforce org, and the AI callout goes from your
 org directly to your provider. MDS LLC operates no servers, APIs or databases for this
 product and is **not** a data processor or sub-processor. See the
-[Privacy Policy](PRIVACY_POLICY).
+[Privacy Policy](PRIVACY_POLICY.md).
 
 ### Will my email content be used to train AI models?
 
@@ -139,13 +134,13 @@ job or data retention tool, like any other object.
 
 No personal data is persisted outside your Salesforce org by the app, and MDS LLC receives
 none. Your obligations for the content you send to your AI provider are governed by your
-agreement with that provider. See the [Privacy Policy](PRIVACY_POLICY).
+agreement with that provider. See the [Privacy Policy](PRIVACY_POLICY.md).
 
 ### Has it passed the Salesforce Security Review?
 
 The package is built to Salesforce ISV security requirements — CRUD and FLS enforced, no
 dynamic SOQL, callouts only through Named Credentials, no external scripts. The
-[Security Policy](SECURITY_POLICY) covers development practices and vulnerability
+[Security Policy](SECURITY_POLICY.md) covers development practices and vulnerability
 response. For review documentation, contact
 [omorgun@morgunsolutions.com](mailto:omorgun@morgunsolutions.com).
 
@@ -156,12 +151,12 @@ response. For review documentation, contact
 ### Which tones are available?
 
 Professional, Friendly, Empathetic, Formal, Concise, and Custom — where the user describes
-the tone in their own words. See the [User Guide](user-guide).
+the tone in their own words. See the [User Guide](user-guide.md).
 
 ### Can I customise how replies are written?
 
 Yes, through prompt templates. Three ship with the package (General, Support, Sales) and
-administrators can add more. See [Prompt templates](setup#prompt-templates).
+administrators can add more. See [Prompt templates](setup.md#prompt-templates).
 
 ### Can it write in languages other than English?
 
@@ -173,7 +168,7 @@ adding a language instruction to a template. There is no translated UI yet.
 
 It can. The model sees only the email thread — not your orders, billing or account data —
 so dates, amounts and policy details may be wrong or fabricated. Always read a draft
-before sending. The [User Guide](user-guide) lists what to check.
+before sending. The [User Guide](user-guide.md) lists what to check.
 
 ### Can it send replies automatically?
 
@@ -191,7 +186,7 @@ Salesforce's own callout limits.
 ### How long does setup take?
 
 About 10 minutes for an administrator who has an API key ready. See the
-[Setup Guide](setup).
+[Setup Guide](setup.md).
 
 ### Does it change any of our existing data or objects?
 
@@ -208,4 +203,4 @@ you want to keep draft records. Revoke the API key in your provider's console af
 ### How do we get support?
 
 Email [omorgun@morgunsolutions.com](mailto:omorgun@morgunsolutions.com), target response
-two business days. [Troubleshooting](troubleshooting) lists the details worth including.
+two business days. [Troubleshooting](troubleshooting.md) lists the details worth including.

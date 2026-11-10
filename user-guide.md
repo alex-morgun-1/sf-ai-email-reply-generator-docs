@@ -1,14 +1,9 @@
----
-layout: default
-title: "User Guide"
----
-
 [← Documentation home](./)
 
 # User Guide
 
 For anyone replying to customer email in Salesforce. No setup needed on your side — your
-administrator does that once (see the [Setup Guide](setup)).
+administrator does that once (see the [Setup Guide](setup.md)).
 
 ---
 
@@ -139,8 +134,8 @@ these records.
 | *No inbound emails found for this record* | No inbound email on this record — use **Enter Email ID manually**. |
 | *Unable to generate reply* | Usually a provider or connection problem. Retry once, then tell your administrator. |
 
-Full list, with the admin-side fix for each: [Troubleshooting](troubleshooting).
+Full list, with the admin-side fix for each: [Troubleshooting](troubleshooting.md).
 
 ---
 
-Questions about cost, providers or what data leaves your org: [FAQ](faq).
+Questions about cost, providers or what data leaves your org: [FAQ](faq.md).
